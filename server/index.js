@@ -7,42 +7,14 @@ require("dotenv").config({
 const port = process.env.PORT;
 const router = require("./routes/items");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 
 mongoose.connect("mongodb://127.0.0.1:27017/printbay", {
   useNewUrlParser: true,
   useCreateIndex: true
 });
 
-const Item = mongoose.model("Item", {
-  title: {
-    type: String
-  },
-  artist: {
-    type: String
-  },
-  image: {
-    type: String
-  },
-  year: {
-    type: Number
-  },
-  price: {
-    type: Number
-  }
-});
-
-const item = new Item({
-  title: "creation of the world"
-});
-
-(async () => {
-  try {
-    await item.save();
-  } catch (error) {
-    console.log(error);
-  }
-})();
-
+app.use(bodyParser.json());
 app.use("/items", router);
 
 app.listen(port, () => {
