@@ -8,8 +8,9 @@ const port = process.env.PORT;
 const router = require("./routes/items");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const dbName = process.env.NODE_ENV === "test" ? "printbay_test" : "printbay";
 
-mongoose.connect("mongodb://127.0.0.1:27017/printbay", {
+mongoose.connect(`mongodb://127.0.0.1:27017/${dbName}`, {
   useNewUrlParser: true,
   useCreateIndex: true
 });
@@ -17,6 +18,10 @@ mongoose.connect("mongodb://127.0.0.1:27017/printbay", {
 app.use(bodyParser.json());
 app.use("/items", router);
 
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-});
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+  });
+}
+
+module.exports = app;
