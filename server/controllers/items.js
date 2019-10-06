@@ -12,7 +12,8 @@ module.exports.list = async (req, res) => {
 };
 
 module.exports.create = async (req, res) => {
-  const item = new Item(req.body);
+  const { title, artist, image, year, price } = req.body;
+  const item = new Item({ title, artist, image, year, price });
 
   try {
     const doc = await item.save();
