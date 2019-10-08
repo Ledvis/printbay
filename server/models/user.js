@@ -29,11 +29,21 @@ const UserSchema = mongoose.Schema(
     },
     token: {
       type: String
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user"
     }
   },
   {
     toJSON: {
-      transform: (doc, { _id, name, email }) => ({ _id, name, email })
+      transform: (doc, { _id, name, email, role }) => ({
+        _id,
+        name,
+        email,
+        role
+      })
     }
   }
 );
@@ -99,6 +109,23 @@ UserSchema.pre("save", async function (next) {
       next();
     } catch (error) {
       next(error);
+    }
+  } else {
+    next();
+  }
+});
+
+/**
+ * * forbid to save more than one user with "admin" role
+ */
+UserSchema.pre("save", async function (next) {
+  if (this.isModified("role") && this.role === "admin") {
+    const users = await this.constructor.find({ role: "admin" });
+
+    if (users.length >= 1) {
+      next(new Error("Only one admin user can be added."));
+    } else {
+      next();
     }
   } else {
     next();

@@ -9,7 +9,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const dbName = process.env.NODE_ENV === "test" ? "printbay_test" : "printbay";
 
-mongoose.connect(`mongodb://127.0.0.1:27017/${dbName}`, {
+mongoose.connect(`${process.env.MONGO_DB_URI}/${dbName}`, {
   useNewUrlParser: true,
   useCreateIndex: true
 });
