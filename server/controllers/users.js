@@ -30,3 +30,13 @@ module.exports.login = async (req, res) => {
     res.status(400).send(error);
   }
 };
+
+module.exports.logout = async (req, res) => {
+  try {
+    await req.body.user.logout();
+
+    res.status(200).send();
+  } catch (error) {
+    res.status(500).send();
+  }
+};

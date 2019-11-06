@@ -39,7 +39,7 @@ const UserSchema = mongoose.Schema(
   {
     toJSON: {
       transform: (doc, { _id, name, email, role }) => ({
-        _id,
+        id: _id,
         name,
         email,
         role
@@ -63,6 +63,12 @@ UserSchema.methods.generateAuthToken = async function () {
   await this.save();
 
   return this.token;
+};
+
+UserSchema.methods.logout = async function () {
+  this.token = null;
+
+  await this.save();
 };
 
 UserSchema.statics.findByToken = async function (token) {

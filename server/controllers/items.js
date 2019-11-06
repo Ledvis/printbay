@@ -1,7 +1,6 @@
 const Item = require("../models/item");
-const { ObjectId } = require("mongodb");
 
-module.exports.list = async (req, res) => {
+module.exports.fetch = async (req, res) => {
   try {
     const items = await Item.find();
 
@@ -24,8 +23,6 @@ module.exports.create = async (req, res) => {
 };
 
 module.exports.read = async (req, res) => {
-  if (!ObjectId.isValid(req.params.id)) return res.status(404).send();
-
   try {
     const item = await Item.findById(req.params.id);
 

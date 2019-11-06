@@ -1,16 +1,21 @@
 const express = require("express");
 const router = express.Router();
-const userController = require("../controllers/users");
+const UserController = require("../controllers/users");
 const authenticate = require("../middleware/auth");
 
 router
   .route("/")
-  .post(userController.create)
+  .post(UserController.create)
   .all(authenticate)
-  .get(userController.read);
+  .get(UserController.read);
 
 router
   .route("/login")
-  .post(userController.login);
+  .post(UserController.login);
+
+router
+  .route("/logout")
+  .all(authenticate)
+  .get(UserController.logout);
 
 module.exports = router;
